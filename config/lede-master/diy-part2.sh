@@ -19,7 +19,21 @@ sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package
 echo "DISTRIB_SOURCECODE='lede'" >>package/base-files/files/etc/openwrt_release
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.2.200）
-sed -i 's/192.168.1.1/192.168.2.200/g' package/base-files/files/bin/config_generate
+# sed -i 's/192.168.1.1/192.168.2.200/g' package/base-files/files/bin/config_generate
+# 网络配置信息，将从 zzz-default-settings 文件的第2行开始添加
+sed -i "2i # network config" package/lean/default-settings/files/zzz-default-settings
+sed -i "3i uci set network.lan.ipaddr='192.168.2.200'" package/lean/default-settings/files/zzz-default-settings
+sed -i "4i uci set network.lan.proto='static'" package/lean/default-settings/files/zzz-default-settings
+sed -i "5i uci set network.lan.type='bridge'" package/lean/default-settings/files/zzz-default-settings
+sed -i "6i uci set network.lan.ifname='eth0'" package/lean/default-settings/files/zzz-default-settings
+sed -i "7i uci set network.lan.netmask='255.255.255.0'" package/lean/default-settings/files/zzz-default-settings
+sed -i "8i uci set network.lan.gateway='192.168.2.10'" package/lean/default-settings/files/zzz-default-settings
+sed -i "9i uci set network.lan.dns='192.168.2.10'" package/lean/default-settings/files/zzz-default-settings
+sed -i "10i uci commit network\n" package/lean/default-settings/files/zzz-default-settings
+
+# 关闭lan口dhcp
+sed -i "11i uci set dhcp.lan.ignore='1'" package/lean/default-settings/files/zzz-default-settings
+sed -i "12i uci commit dhcp\n" package/lean/default-settings/files/zzz-default-settings
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
