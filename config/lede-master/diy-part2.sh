@@ -20,6 +20,9 @@ echo "DISTRIB_SOURCECODE='lede'" >>package/base-files/files/etc/openwrt_release
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.2.200）
 # sed -i 's/192.168.1.1/192.168.2.200/g' package/base-files/files/bin/config_generate
+# 修改默认主机名(OpenWrt->OpenWrt-Box)
+sed -i 's/OpenWrt/OpenWrt-Box/g' package/base-files/files/bin/config_generate
+
 # 网络配置信息，将从 zzz-default-settings 文件的第2行开始添加
 # 设置lan
 sed -i "2i # network config" package/lean/default-settings/files/zzz-default-settings
